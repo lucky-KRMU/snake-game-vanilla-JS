@@ -1,13 +1,39 @@
+:root{
+    --board-cell: 64vmin;
+    --grid-size: 8;
+}
+
 *{
     margin: 0;
     padding: 0;
 }
 
+body{
+    overflow: hidden;
+}
+
 h1{
     height: 10vh; 
     width: 100vw;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.game-body{
+    height: 90vh;
+    width: 100vw;
+    background-color: bisque;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#board{
+    height: var(--board-cell);
+    width: var(--board-cell);
+    border: 2px solid black;
+    display: grid;
+    grid-template-columns: repeat(var(--grid-size), 1fr);
+    grid-template-rows: repeat(var(--grid-size), 1fr);
 }
