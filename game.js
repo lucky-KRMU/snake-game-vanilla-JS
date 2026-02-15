@@ -3,6 +3,15 @@ let player = document.getElementById("player"); // targeting the player
 let gridSize = 8; // the size of the grid
 let fps = 300; // defined fps
 
+let foodArray = [];
+
+let initialFood = document.createElement('div');    // creating the initial food
+initialFood.className = 'food';
+initialFood.style.gridColumn = initialFood.style.gridRow = 4;
+// let food = board.appendChild(initialFood); // defining the food variable
+let food = spawnFood(gridSize, foodArray);
+
+
 // let movement = true;
 
 let direction; // defining the direction variable
@@ -34,27 +43,45 @@ document.addEventListener("keydown", (e)=>{
     console.log(key, playerPos);
 });
 
-const spawnFood = (gridSize) =>{
+function spawnFood (gridSize){
     let foodX = Math.ceil( Math.random() * gridSize );
     let foodY = Math.ceil( Math.random() * gridSize );
 
     let food = document.createElement('div');
-    food.id = "food";
+    food.className = "food";
     food.style.gridColumn = foodX;
     food.style.gridRow = foodY;
     board.appendChild(food);
 
+    foodArray.push(food);
+    return foodArray;
+
+}
+
+function foodConsumed ( food, playerHead ) {
+    if (food.style.gridColumn === playerHead.style.gridColumn && food.style.gridRow === playerHead.style.gridRow) {
+        if (board.contains(food)){
+            board.removeChild(food);
+            console.log("food consumed!")
+        }
+    }
 }
 
 // spawnFood(gridSize);
 
 // interval to spawn food
 setInterval(() => {
-    spawnFood(gridSize); //calling the spawnFood method
+    food = spawnFood(gridSize); //calling the spawnFood method
 }, 5000);
+
+
 
 setInterval(()=>{
     
+    // iterating over the food array to check for each consumption
+    foodArray.forEach((food)=>{
+        foodConsumed(food, player)
+    })
     
     // updating the position of the player
     if (direction === "+X") {
