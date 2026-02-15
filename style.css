@@ -45,3 +45,7 @@ h1{
 .player{
     background-color: lime;
 }
+
+#food{
+    background-color: red;
+}

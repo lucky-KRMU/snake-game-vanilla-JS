@@ -5,7 +5,7 @@ let fps = 300; // defined fps
 
 // let movement = true;
 
-let direction;
+let direction; // defining the direction variable
 
 let playerPos ={ // storing the player position
     x: 5,
@@ -32,10 +32,28 @@ document.addEventListener("keydown", (e)=>{
         // movement = false;
     }
     console.log(key, playerPos);
-})
+});
+
+const spawnFood = (gridSize) =>{
+    let foodX = Math.ceil( Math.random() * gridSize );
+    let foodY = Math.ceil( Math.random() * gridSize );
+
+    let food = document.createElement('div');
+    food.id = "food";
+    food.style.gridColumn = foodX;
+    food.style.gridRow = foodY;
+    board.appendChild(food);
+
+}
+
+// spawnFood(gridSize);
+
+// interval to spawn food
+setInterval(() => {
+    spawnFood(gridSize); //calling the spawnFood method
+}, 5000);
 
 setInterval(()=>{
-    
     
     
     // updating the position of the player
