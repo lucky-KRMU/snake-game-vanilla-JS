@@ -5,8 +5,11 @@ let fps = 300; // defined fps
 let foodArray = []; // defining the food array
 let food = spawnFood(gridSize, foodArray); // spawing the initial food.
 
+
 let snakeTail = [];
 let snakeTrail = [];
+
+// snakeTail.push(player);
 
 let firstByte = true;
 
@@ -65,7 +68,7 @@ function spawnFood (gridSize){
 
 // function to handle the food consumption event
 function foodConsumed ( food, playerHead ) {
-    if (food.style.gridColumn === playerHead.style.gridColumn && food.style.gridRow === playerHead.style.gridRow) {
+    if (food.style.gridColumn == playerHead.style.gridColumn && food.style.gridRow == playerHead.style.gridRow) {
         if (board.contains(food)){
 
             board.removeChild(food);    // removing the food.
@@ -73,7 +76,23 @@ function foodConsumed ( food, playerHead ) {
 
             let tail = document.createElement('div');
             tail.className = 'player';
+
+            // if (direction === "+X") {
+            //     tail.style.gridColumn = parseInt(snakeTail[snakeTail.length-1].style.gridColumn) - 1;
+            //     tail.style.gridRow = parseInt(snakeTail[snakeTail.length-1].style.gridRow);
+            // } else if (direction === "-X"){
+            //     tail.style.gridColumn = parseInt(snakeTail[snakeTail.length-1].style.gridColumn) + 1;
+            //     tail.style.gridRow = parseInt(snakeTail[snakeTail.length-1].style.gridRow);
+            // } else if (direction === "+Y"){
+            //     tail.style.gridColumn = parseInt(snakeTail[snakeTail.length-1].style.gridColumn);
+            //     tail.style.gridRow = parseInt(snakeTail[snakeTail.length-1].style.gridRow) - 1;
+            // } else if (direction === "-Y"){
+            //     tail.style.gridColumn = parseInt(snakeTail[snakeTail.length-1].style.gridColumn);
+            //     tail.style.gridRow = parseInt(snakeTail[snakeTail.length-1].style.gridRow) + 1;
+            // }
+
             snakeTail.push(tail);
+            console.log(snakeTail);
             board.appendChild(tail);
 
             let trail = {
@@ -150,6 +169,7 @@ setInterval(()=>{
     // updating the position of the player
     if (direction === "+X") {
         playerPos.x += 1;
+        
     } else if (direction === "-X"){
         playerPos.x -= 1;        
     } else if (direction === "+Y"){
@@ -214,6 +234,11 @@ setInterval(()=>{
         tailNode.style.gridRow = snakeTrail[index]["y"];
 
     });
+
+    // for (let index = 1; index < snakeTail.length; index++) {
+    //     snakeTail[index].style.gridColumn = parseInt(snakeTail[index-1].style.gridColumn);        
+    //     snakeTail[index].style.gridRow = parseInt(snakeTail[index-1].style.gridRow);        
+    // }
 
 
 
