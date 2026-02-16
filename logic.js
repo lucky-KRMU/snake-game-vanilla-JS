@@ -142,6 +142,7 @@ setInterval(()=>{
 
                 board.appendChild(tailElement);
                 snakeTail.push(tailElement);
+                snakeTrail.push(trail);
             }
         }
 
@@ -149,8 +150,14 @@ setInterval(()=>{
 
     //updating the snake's body
     for (let i = snakeTrail.length - 1; i>0; i--){
-
+        snakeTrail[i].x = snakeTrail[i-1].x;
+        snakeTrail[i].y = snakeTrail[i-1].y;
     }
+
+    snakeTail.forEach((snake, index)=>{
+        snake.style.gridColumn = snakeTrail[index].x;
+        snake.style.gridRow = snakeTrail[index].y;
+    })
    
 
 
