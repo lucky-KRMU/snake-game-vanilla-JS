@@ -7,10 +7,11 @@ let gridSize = 8;
 
 let snakeTrail = [];
 let snakeTail = [];
-let direction = "+X";
+let direction;
 let foodList = [];
 let firstByte = true;
 let gameOver = false;
+let firstKey = true;
 
 
 let foodConsumedCount = 0;
@@ -43,6 +44,7 @@ document.addEventListener('keydown', (e)=>{
         direction = "+X";
     }
     // console.log(direction);
+    firstKey = false;
 
 });
 
@@ -105,7 +107,9 @@ function spawnFood () {
 
 // spawing food in every 3 seconds
 let foodLoop = setInterval(()=>{
-    spawnFood();
+    if(!firstKey){
+        spawnFood();
+    }
 }, 3000)
 
 // main game loop
@@ -188,24 +192,26 @@ let gameLoop = setInterval(()=>{
     
     // updating the snake head position
     // updating the movement
-    if (direction == "+X") {
-        initialPos.x += 1;
-        // velocity.x = 1;
-    } else if(direction == "-X") {
-        initialPos.x -=1;
-        // velocity.x = -1;
-    } else if (direction == "+Y"){
-        initialPos.y += 1;
-        // velocity.y = 1;
-    } else if (direction == "-Y"){
-        initialPos.y -= 1;
-        // velocity.y = -1;
+    if (!firstKey){    // updating the movement on the first key only
+        if (direction == "+X") {
+            initialPos.x += 1;
+            // velocity.x = 1;
+        } else if(direction == "-X") {
+            initialPos.x -=1;
+            // velocity.x = -1;
+        } else if (direction == "+Y"){
+            initialPos.y += 1;
+            // velocity.y = 1;
+        } else if (direction == "-Y"){
+            initialPos.y -= 1;
+            // velocity.y = -1;
+        }
     }
     
     player.style.gridColumn = initialPos.x;
     player.style.gridRow = initialPos.y;
     
-    checkGameOver();
-    scoreCount.textContent = `Score: ${foodConsumedCount}`
+    checkGameOver();    // checking for game over
+    scoreCount.textContent = `Score: ${foodConsumedCount}`; // updating the score
 }, 300)
 
