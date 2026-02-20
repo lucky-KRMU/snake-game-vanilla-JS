@@ -1,5 +1,6 @@
 let board = document.getElementById("board");
 let player = document.getElementById("player");
+let scoreCount = document.getElementById("score-count");
 let gridSize = 8;
 
 
@@ -10,6 +11,7 @@ let direction = "+X";
 let foodList = [];
 let firstByte = true;
 let gameOver = false;
+
 
 let foodConsumedCount = 0;
 
@@ -40,43 +42,63 @@ document.addEventListener('keydown', (e)=>{
     } else if (key == "ArrowRight"){
         direction = "+X";
     }
-    console.log(direction)
+    // console.log(direction);
 
 });
 
 function checkGameOver(){
-    snakeTail.forEach((snake, index)=>{
+    // checking for the snake touching it's own body
+    let headX = initialPos.x;
+    let headY = initialPos.y;
+
+    let neoTail = snakeTail.toSpliced(0, 1);    // removing the head and storing the value in a new array
+
+    neoTail.forEach(snake => {
         let snakeX = snake.style.gridColumn;
         let snakeY = snake.style.gridRow;
-
-        let headX = initialPos.x;
-        let headY = initialPos.y;
-        // if(!firstByte){
-            if (snakeX == headX && snakeY == headY){
-                console.log("Game Over!");
-                console.log(snakeTrail[snakeTrail.length - 1]);
+           if (snakeX == headX && snakeY == headY){
                 gameOver = true;
-                clearInterval(foodLoop);
-                clearInterval(gameLoop);
-                // removeInterval(gameLoop);
             }
 
-        // }
+    });
 
-    })
+    // checking if the snake touches the board's walls
+    if (initialPos.x < 1){
+        gameOver = true;
+    } else if (initialPos.x > gridSize){
+        gameOver = true;
+    }
+    
+    if (initialPos.y > gridSize){
+        gameOver = true;
+    } else if (initialPos.y < 1){
+        gameOver = true;
+    }
+
+
+
+    // final things to do if the game is over
+    if(gameOver){
+        clearInterval(foodLoop); // stopping the food loop
+        clearInterval(gameLoop); // terminating the game loop
+        alert("Game Over!");
+        location.reload() // reloading after the game get's over!
+    }
 }
 
 
 function spawnFood () {
-
+    // generating the food at random locations
     let spawnX = Math.ceil(Math.random() * gridSize);
     let spawnY = Math.ceil(Math.random() * gridSize);
 
+    // creating the HTML DOM element for the food
     let food = document.createElement('p');
     food.className = 'food';
     food.style.gridColumn = spawnX;
     food.style.gridRow = spawnY;
 
+    // updating it into the DOM
     board.appendChild(food);
     foodList.push(food);
 }
@@ -92,18 +114,7 @@ let gameLoop = setInterval(()=>{
     
     
     
-    // Condition to check that the player does not go out of the baord and return to the opposite edge.
-    if (initialPos.x < 1){
-        initialPos.x = gridSize;
-    } else if (initialPos.x > gridSize){
-        initialPos.x = 0;
-    }
     
-    if (initialPos.y > gridSize){
-        initialPos.y = 0;
-    } else if (initialPos.y < 1){
-        initialPos.y = gridSize;
-    }
 
 
     // checking for food consumption
@@ -111,12 +122,8 @@ let gameLoop = setInterval(()=>{
         let foodX = food.style.gridColumn;
         let foodY = food.style.gridRow;
 
-        let previousPos = {
-            x: initialPos.x,
-            y: initialPos.y
-        }
-
-        if (initialPos.x == foodX && initialPos.y == foodY){
+        // checking for the Food
+        if (initialPos.x == foodX && initialPos.y == foodY){    
             if (board.contains(food)) {
                 foodConsumedCount+=1;
                 console.log(foodConsumedCount);
@@ -145,6 +152,9 @@ let gameLoop = setInterval(()=>{
                     trail.y = snakeTrail[snakeTrail.length - 1].y + 1;
                 }
 
+                if (firstByte) {
+                    firstByte = !firstByte;
+                }
 
 
                 tailElement.className = "player";
@@ -174,8 +184,7 @@ let gameLoop = setInterval(()=>{
         snake.style.gridRow = snakeTrail[index].y;
     })
 
-    // checkGameOver();
-
+    
     
     // updating the snake head position
     // updating the movement
@@ -192,9 +201,11 @@ let gameLoop = setInterval(()=>{
         initialPos.y -= 1;
         // velocity.y = -1;
     }
-
+    
     player.style.gridColumn = initialPos.x;
     player.style.gridRow = initialPos.y;
-
+    
+    checkGameOver();
+    scoreCount.textContent = `Score: ${foodConsumedCount}`
 }, 300)
 

@@ -21,7 +21,7 @@ h1{
     align-items: center;
 }
 .game-body{
-    height: 90vh;
+    height: 85vh;
     width: 100vw;
     background-color: bisque;
     display: flex;
